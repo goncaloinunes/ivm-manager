@@ -189,6 +189,113 @@ def categoria_add():
 
 
 
+
+@app.route('/retalhistas')
+def retalhistas_list():
+        
+    dbConn = None
+    cursor = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute("SELECT * FROM retalhista")
+        return render_template('retalhistas_list.html', cursor = cursor, params = request.args)
+
+    except Exception as e:
+        return str(e)
+        
+    finally:
+        if cursor:
+            cursor.close()
+        if dbConn:
+            dbConn.close()
+
+
+@app.route('/retalhista_adicionar')
+def retalhista_adicionar():
+    try:
+        return render_template("retalhista_adicionar.html")
+    except Exception as e:
+        return str(e)
+
+
+@app.route('/retalhista_add', methods=["POST"])
+def retalhista_add():
+    dbConn = None
+    cursor = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        retalhista_name = request.form['name']
+        retalhista_tin = request.form['tin']
+
+        query = "INSERT INTO retalhista VALUES (%s, %s)"
+        data = (retalhista_tin, retalhista_name)
+        cursor.execute(query, data)
+
+        dbConn.commit()
+
+        return str(cursor.mogrify(query, data).decode('utf-8'))
+
+    except Exception as e:
+        return str(e)
+        
+    finally:
+        if cursor:
+            cursor.close()
+        if dbConn:
+            dbConn.close()
+
+
+
+@app.route('/retalhista_remove', methods=["POST"])
+def retalhista_remove():
+    dbConn = None
+    cursor = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        category_name = request.form['category_name']
+        queries = []
+
+        query = "DELETE FROM tem_outra WHERE super_categoria = %s or categoria = %s"
+        data = (category_name, category_name)
+        cursor.execute(query, data)
+        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+
+        query = "DELETE FROM categoria_simples WHERE nome = %s"
+        data = (category_name,)
+        cursor.execute(query, data)
+        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+
+        query = "DELETE FROM super_categoria WHERE nome = %s"
+        data = (category_name,)
+        cursor.execute(query, data)
+        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+
+        query = "DELETE FROM categoria WHERE nome = %s"
+        data = (category_name,)
+        cursor.execute(query, data)
+        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+
+        dbConn.commit()
+
+        return str(queries)
+
+    except Exception as e:
+        return str(e)
+        
+    finally:
+        if cursor:
+            cursor.close()
+        if dbConn:
+            dbConn.close()
+
+
+
+
+
 CGIHandler().run(app)
 
 

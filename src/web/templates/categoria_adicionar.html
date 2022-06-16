@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Adicionar Categoria</title>
+</head>
+<body>
+    <h3>Adicionar Categoria</h3>
+    <form action="categoria_add" method="post">
+    <p>Nome da Categoria: <input type="text" name="category_name"/></p>
+    <p>Nome da Super Categoria: <input type="text" name="super_category" value="{{ params.get('super_name') if params.get('super_name') else '' }}"/>
+        <span>Deixar em branco se não pertencer a uma Super Categoria</span>
+    </p>
+    
+    <p> Tipo de categoria: 
+        <input type="radio" name="category_type" value="categoria_simples" checked="checked"> Categoria Simples
+        <input type="radio" name="category_type" value="categoria_super"> Super Categoria
+    </p>
+
+    <p><input type="submit" value="Adicionar"/></p>
+</form>
+</body>
+</html>

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-import re
 from wsgiref.handlers import CGIHandler
 
 from flask import Flask, render_template, request
@@ -110,6 +109,21 @@ def categoria_remove():
         data = (category_name,)
         cursor.execute(query, data)
         queries.append(cursor.mogrify(query, data).decode('utf-8'))
+
+        # query = "DELETE FROM tem_categoria WHERE nome = %s"
+        # data = (category_name,)
+        # cursor.execute(query, data)
+        # queries.append(cursor.mogrify(query, data).decode('utf-8'))
+
+        # query = "DELETE FROM planograma WHERE loc = %s"
+        # data = (category_name,)
+        # cursor.execute(query, data)
+        # queries.append(cursor.mogrify(query, data).decode('utf-8'))
+
+        # query = "DELETE FROM prateleira WHERE nome = %s"
+        # data = (category_name,)
+        # cursor.execute(query, data)
+        # queries.append(cursor.mogrify(query, data).decode('utf-8'))
 
         query = "DELETE FROM categoria WHERE nome = %s"
         data = (category_name,)
@@ -256,26 +270,22 @@ def retalhista_remove():
     try:
         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        category_name = request.form['category_name']
         queries = []
 
-        query = "DELETE FROM tem_outra WHERE super_categoria = %s or categoria = %s"
-        data = (category_name, category_name)
+        retalhista_tin = request.form['tin']
+
+        query = "DELETE FROM responsavel_por WHERE tin = %s"
+        data = (retalhista_tin,)
         cursor.execute(query, data)
         queries.append(cursor.mogrify(query, data).decode('utf-8'))
 
-        query = "DELETE FROM categoria_simples WHERE nome = %s"
-        data = (category_name,)
+        query = "DELETE FROM evento_reposicao WHERE tin = %s"
+        data = (retalhista_tin,)
         cursor.execute(query, data)
         queries.append(cursor.mogrify(query, data).decode('utf-8'))
 
-        query = "DELETE FROM super_categoria WHERE nome = %s"
-        data = (category_name,)
-        cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
-
-        query = "DELETE FROM categoria WHERE nome = %s"
-        data = (category_name,)
+        query = "DELETE FROM retalhista WHERE tin = %s"
+        data = (retalhista_tin,)
         cursor.execute(query, data)
         queries.append(cursor.mogrify(query, data).decode('utf-8'))
 

@@ -305,6 +305,68 @@ def retalhista_remove():
 
 
 
+@app.route('/ivms')
+def ivms_list():
+        
+    dbConn = None
+    cursor = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute("SELECT * FROM ivm")
+        return render_template('ivms_list.html', cursor = cursor, params = request.args)
+
+    except Exception as e:
+        return str(e)
+        
+    finally:
+        if cursor:
+            cursor.close()
+        if dbConn:
+            dbConn.close()
+
+
+
+@app.route('/eventos_reposicao')
+def eventos_reposicao_list():
+        
+    dbConn = None
+    cursor1 = None
+    cursor2 = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor1 = dbConn.cursor(name = 'cursor1', cursor_factory=psycopg2.extras.DictCursor)
+        cursor2 = dbConn.cursor(name = 'cursor2', cursor_factory=psycopg2.extras.DictCursor)
+
+
+        if request.args.get('num_serie') and request.args.get('fabricante'):
+            query = "SELECT * FROM evento_reposicao WHERE num_serie = %s and fabricante = %s"
+            data = (request.args.get('num_serie'), request.args.get('fabricante'))
+            cursor1.execute(query, data)
+
+
+            query = "SELECT nome, unidades FROM tem_categoria JOIN evento_reposicao ON tem_categoria.ean = evento_reposicao.ean WHERE num_serie = %s AND fabricante = %s;"
+            data = (request.args.get('num_serie'), request.args.get('fabricante'))
+            cursor2.execute(query, data)
+
+        
+        else:
+            cursor1.execute("SELECT * FROM evento_reposicao")
+
+        return render_template('eventos_reposicao_list.html', cursor = cursor1, categories = cursor2, params = request.args)
+
+    except Exception as e:
+        return str(e)
+        
+    finally:
+        if cursor1:
+            cursor1.close()
+        if cursor2:
+            cursor2.close()
+        if dbConn:
+            dbConn.close()
+
+
 
 CGIHandler().run(app)
 

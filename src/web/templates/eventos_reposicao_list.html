@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Eventos Reposição</title>
+</head>
+<body style="padding:20px">
+{% if cursor %}
+    {% if params.get('num_serie') and params.get('fabricante') %}
+        <h1>Eventos Reposição da IVM nº {{ params.get('num_serie') }} do fabricante {{ params.get('fabricante') }}</h1>
+    {% else %}
+        <h1>Eventos de Reposição</h1>
+    {% endif %}
+    <table border="2px">
+        <thead>
+            <tr>
+                <th>EAN</th>
+                <th>Número Prateleira</th>
+                <th>Número Série</th>
+                <th>Fabricante</th>
+                <th>Instante</th>
+                <th>Unidades</th>
+                <th>TIN Retalhista</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in cursor %}
+            <tr>
+                <td>{{ record[0] }}</td>
+                <td>{{ record[1] }}</td>
+                <td>{{ record[2] }}</td>
+                <td>{{ record[3] }}</td>
+                <td>{{ record[4] }}</td>
+                <td>{{ record[5] }}</td>
+                <td>{{ record[6] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br><br>
+    {% if params.get('num_serie') and params.get('fabricante') %}
+        <h2>Número de Eventos de Reposição por Categoria nesta IVM</h2>
+        <table border="2px">
+            <thead>
+                <tr>
+                    <th>Nome Categoria</th>
+                    <th>Número de Eventos de Reposição</th>
+                </tr>
+        </thead>
+        <tbody></tbody>
+        {% for record in categories %}
+            <tr>
+                <td>{{ record[0] }}</td>
+                <td>{{ record[1] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+{% else %}
+    <p> Erro: ao obter dados da base de dados!</p>
+{% endif %}
+</body>
+</html>

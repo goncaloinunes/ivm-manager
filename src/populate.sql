@@ -34,6 +34,8 @@ insert into categoria values ('Mocha');
 insert into categoria values ('Mocha Latte');
 insert into categoria values ('Cheese');
 insert into categoria values ('Apricots');
+--added
+insert into categoria values ('Vegetable');
 
 
 /* categoria_simples */
@@ -69,6 +71,8 @@ insert into super_categoria values ('Mocha');
 insert into super_categoria values ('Mocha Latte');
 insert into super_categoria values ('Cheese');
 insert into super_categoria values ('Apricots');
+--added
+insert into super_categoria values ('Vegetable');
 
 
 /* tem_outra */
@@ -89,6 +93,8 @@ insert into tem_outra (super_categoria, categoria) values ('Mocha Latte', 'Mocha
 insert into tem_outra (super_categoria, categoria) values ('Cheese', 'Grana Padano');
 insert into tem_outra (super_categoria, categoria) values ('Cheese', 'Serra da Estrela');
 insert into tem_outra (super_categoria, categoria) values ('Apricots', 'Halves');
+--added
+insert into tem_outra (super_categoria, categoria) values ('Vegetable', 'Alface');
 
 
 
@@ -112,6 +118,9 @@ insert into tem_categoria (ean, nome) values (1234567890127, 'Coke');
 insert into tem_categoria (ean, nome) values (1234567890128, 'Coke');
 insert into tem_categoria (ean, nome) values (1234567890129, 'Decafenated');
 insert into tem_categoria (ean, nome) values (1234567890130, 'Alface');
+--added
+insert into tem_categoria (ean, nome) values (1234567890124, 'Vegetable');
+insert into tem_categoria (ean, nome) values (1234567890130, 'Vegetable');
 
 
 /* ivm */
@@ -188,8 +197,8 @@ insert into prateleira (nro, num_serie, fabricante, altura, nome) values (2, 000
 insert into prateleira (nro, num_serie, fabricante, altura, nome) values (3, 0001, 'Evil Corp', 1.5, 'Cookie');
 insert into prateleira (nro, num_serie, fabricante, altura, nome) values (4, 0001, 'Evil Corp', 2.0, 'Coke');
 insert into prateleira (nro, num_serie, fabricante, altura, nome) values (1, 1093, 'LG', 0.5, 'Galliano');
-insert into prateleira (nro, num_serie, fabricante, altura, nome) values (2, 1093, 'LG', 1.0, 'Cheese');
-insert into prateleira (nro, num_serie, fabricante, altura, nome) values (3, 1093, 'LG', 1.5, 'Apricots');
+insert into prateleira (nro, num_serie, fabricante, altura, nome) values (2, 1093, 'LG', 1.0, 'Decafenated');
+insert into prateleira (nro, num_serie, fabricante, altura, nome) values (3, 1093, 'LG', 1.5, 'Coke');
 insert into prateleira (nro, num_serie, fabricante, altura, nome) values (1, 1094, 'LG', 0.5, 'Galliano');
 insert into prateleira (nro, num_serie, fabricante, altura, nome) values (2, 1094, 'LG', 1.0, 'Coffee');
 insert into prateleira (nro, num_serie, fabricante, altura, nome) values (3, 1094, 'LG', 1.5, 'Mocha');
@@ -202,12 +211,14 @@ insert into prateleira (nro, num_serie, fabricante, altura, nome) values (2, 344
 
 /* planograma */
 insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890123, 1, 0001, 'Evil Corp', 1, 5, 'Ponto de Retalho 1');
-insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890123, 2, 0001, 'Evil Corp', 1, 5, 'Ponto de Retalho 1');
-insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890123, 3, 0001, 'Evil Corp', 1, 5, 'Ponto de Retalho 1');
-insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890123, 4, 0001, 'Evil Corp', 1, 5, 'Ponto de Retalho 1');
+insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890124, 2, 0001, 'Evil Corp', 1, 5, 'Ponto de Retalho 1');
+insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890125, 3, 0001, 'Evil Corp', 1, 5, 'Ponto de Retalho 1');
+insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890127, 4, 0001, 'Evil Corp', 1, 5, 'Ponto de Retalho 1');
 insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890123, 1, 1093, 'LG', 1, 5, 'Ponto de Retalho 2');
-insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890123, 2, 1093, 'LG', 1, 5, 'Ponto de Retalho 2');
-insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890124, 3, 1093, 'LG', 1, 5, 'Ponto de Retalho 2');
+insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890129, 2, 1093, 'LG', 1, 5, 'Ponto de Retalho 2');
+insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890127, 3, 1093, 'LG', 1, 5, 'Ponto de Retalho 2');
+--added
+--insert into planograma (ean, nro, num_serie, fabricante, faces, unidades, loc) values (1234567890130, 4, 1093, 'LG', 1, 3, 'Ponto de Retalho 2');
 
 
 /* responsavel_por */
@@ -233,7 +244,6 @@ insert into responsavel_por (nome_cat, tin, num_serie, fabricante) values ('Halv
 insert into responsavel_por (nome_cat, tin, num_serie, fabricante) values ('Alface', 123456780, 0020, 'Evil Corp');
 insert into responsavel_por (nome_cat, tin, num_serie, fabricante) values ('Frutos', 123456780, 0021, 'Evil Corp');
 
-
 insert into responsavel_por (nome_cat, tin, num_serie, fabricante) values ('Cheese', 123456781, 1093, 'LG');
 insert into responsavel_por (nome_cat, tin, num_serie, fabricante) values ('Galliano', 123456782, 1094, 'LG');
 insert into responsavel_por (nome_cat, tin, num_serie, fabricante) values ('Coke', 123456782, 3392, 'Samsung');
@@ -244,15 +254,8 @@ insert into responsavel_por (nome_cat, tin, num_serie, fabricante) values ('Musk
 
 /* evento_reposicao */
 insert into evento_reposicao (ean, nro, num_serie, fabricante, instante, unidades, tin) values (1234567890123, 1, 0001, 'Evil Corp', '2016-01-01 00:00:00', 5, 123456780);
-insert into evento_reposicao (ean, nro, num_serie, fabricante, instante, unidades, tin) values (1234567890123, 2, 0001, 'Evil Corp', '2016-01-02 00:00:00', 4, 123456780);
-insert into evento_reposicao (ean, nro, num_serie, fabricante, instante, unidades, tin) values (1234567890123, 3, 0001, 'Evil Corp', '2016-01-03 00:00:00', 3, 123456780);
-insert into evento_reposicao (ean, nro, num_serie, fabricante, instante, unidades, tin) values (1234567890123, 4, 0001, 'Evil Corp', '2016-01-04 00:00:00', 2, 123456780);
-insert into evento_reposicao (ean, nro, num_serie, fabricante, instante, unidades, tin) values (1234567890123, 2, 1093, 'LG', '2016-01-01 00:00:00', 1, 123456782);
-insert into evento_reposicao (ean, nro, num_serie, fabricante, instante, unidades, tin) values (1234567890124, 3, 1093, 'LG', '2016-01-01 00:00:00', 1, 123456782);
-
-
-
-
-
-
-
+insert into evento_reposicao (ean, nro, num_serie, fabricante, instante, unidades, tin) values (1234567890124, 2, 0001, 'Evil Corp', '2016-01-02 00:00:00', 4, 123456780);
+insert into evento_reposicao (ean, nro, num_serie, fabricante, instante, unidades, tin) values (1234567890125, 3, 0001, 'Evil Corp', '2016-01-03 00:00:00', 3, 123456780);
+--insert into evento_reposicao (ean, nro, num_serie, fabricante, instante, unidades, tin) values (1234567890127, 4, 0001, 'Evil Corp', '2016-01-04 00:00:00', 2, 123456780);
+insert into evento_reposicao (ean, nro, num_serie, fabricante, instante, unidades, tin) values (1234567890129, 2, 1093, 'LG', '2016-01-01 00:00:00', 1, 123456782);
+insert into evento_reposicao (ean, nro, num_serie, fabricante, instante, unidades, tin) values (1234567890127, 3, 1093, 'LG', '2016-01-01 00:00:00', 1, 123456782);

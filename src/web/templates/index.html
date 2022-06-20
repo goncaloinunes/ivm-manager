@@ -2,28 +2,18 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>List accounts - Flask</title>
+    <title>Página Principal</title>
 </head>
 <body style="padding:20px">
-{% if cursor %}
-    <table border="2px">
-        <thead>
-            <tr>
-                <th>Ean</th>
-                <th>descr</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for record in cursor %}
-            <tr>
-                <td>{{ record[0] }}</td>
-                <td>{{ record[1] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <p> Erro: ao obter dados da base de dados!</p>
-{% endif %}
+    <h1>Bem-vindo!</h1>
+
+    <button onclick="window.location.href='categorias'">Categorias</button>    
+    <button onclick="window.location.href='categoria_adicionar'">Adicionar Categoria</button>
+    <button onclick="window.location.href='retalhistas'">Retalhistas</button>
+    <button onclick="window.location.href='retalhista_adicionar'">Adicionar Retalhista</button>
+    <button onclick="window.location.href='ivms'">IVMs</button>
+    <button onclick="window.location.href='eventos_reposicao'">Eventos de Reposição</button>
+    <button onclick="window.location.href='produtos'">Produtos</button>
+
 </body>
 </html>

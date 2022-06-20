@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from inspect import Traceback
 from wsgiref.handlers import CGIHandler
 
 from flask import Flask, render_template, request
@@ -24,6 +25,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    try:
+        return render_template("index.html")
+    except Exception as e:
+        return str(e)
+
+
+@app.route('/produtos')
+def produtos_list():
 
     dbConn = None
     cursor = None
@@ -31,7 +40,7 @@ def index():
         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cursor.execute("SELECT * FROM produto")
-        return render_template('index.html', cursor = cursor)
+        return render_template('produtos.html', cursor = cursor)
 
     except Exception as e:
         return str(e)
@@ -43,46 +52,46 @@ def index():
             dbConn.close()
 
 
-@app.route('/categorias_simples')
-def categorias_simples_list():
-    
+@app.route('/categorias')
+def categorias_list():
+
+
     dbConn = None
-    cursor = None
+    cursor1 = None
+    cursor2 = []
     try:
         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
-        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute("SELECT * FROM categoria_simples")
-        return render_template('categorias_simples_list.html', cursor = cursor, params = request.args)
+        cursor1 = dbConn.cursor(name = 'cursor1', cursor_factory=psycopg2.extras.DictCursor)
+        cursor2 = dbConn.cursor(name = 'cursor2', cursor_factory=psycopg2.extras.DictCursor)
+
+
+        if request.args.get('super_category'):
+            query = "SELECT categoria FROM tem_outra WHERE super_categoria = %s AND categoria IN ( SELECT nome FROM super_categoria )"
+            data = (request.args.get('super_category'),)
+            cursor1.execute(query, data)
+
+            query = "SELECT categoria FROM tem_outra WHERE super_categoria = %s AND categoria IN ( SELECT nome FROM categoria_simples )"
+            data = (request.args.get('super_category'),)
+            cursor2.execute(query, data)
+
+        
+        else:
+            cursor1.execute("SELECT * FROM super_categoria")
+            cursor2.execute("SELECT * FROM categoria_simples")
+
+        return render_template('categorias_list.html', cursor = cursor1, cursor2 = cursor2, params = request.args)
 
     except Exception as e:
         return str(e)
         
     finally:
-        if cursor:
-            cursor.close()
+        if cursor1:
+            cursor1.close()
+        if cursor2 != []:
+            cursor2.close()
         if dbConn:
             dbConn.close()
-
-
-@app.route('/categorias_super')
-def categorias_super_list():
     
-    dbConn = None
-    cursor = None
-    try:
-        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
-        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute("SELECT * FROM super_categoria")
-        return render_template('categorias_super_list.html', cursor = cursor, params = request.args)
-
-    except Exception as e:
-        return str(e)
-        
-    finally:
-        if cursor:
-            cursor.close()
-        if dbConn:
-            dbConn.close()
 
 
 @app.route('/categoria_remove', methods=["POST"])
@@ -301,7 +310,6 @@ def retalhista_remove():
             cursor.close()
         if dbConn:
             dbConn.close()
-
 
 
 

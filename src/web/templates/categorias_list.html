@@ -6,11 +6,15 @@
 </head>
 <body style="padding:20px">
 {% if cursor %}
+    {% if params.get('super_category') %}
+        <h1>Subcategorias da Super Categoria: {{ params.get('super_category') }}</h1>
+    {% endif %}
     <table border="2px">
         <thead>
             <tr>
                 <th>Nome</th>
                 <th>Adicionar Sub-Categoria</th>
+                <th>Ver Subcategorias</th>
                 <th>Remover</th>
             </tr>
         </thead>
@@ -20,6 +24,24 @@
                 <td>{{ record[0] }}</td>
                 <td>
                     <a href="categoria_adicionar?super_name={{ record[0] }}">Adicionar</a>
+                </td>
+                <td>
+                    <a href="categorias?super_category={{ record[0] }}">Ver</a>
+                </td>
+                <td>
+                    <form action="categoria_remove" method="post">
+                        <input type="hidden" name="category_name" value="{{ record[0] }}"/>
+                        <input type="submit" value="Remover"/>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            {% for record in cursor2 %}
+            <tr>
+                <td>{{ record[0] }}</td>
+                <td>
+                </td>
+                <td>
                 </td>
                 <td>
                     <form action="categoria_remove" method="post">

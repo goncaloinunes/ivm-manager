@@ -104,6 +104,11 @@ def categoria_remove():
         category_name = request.form['category_name']
         queries = []
 
+        query = "DELETE FROM produto WHERE ean IN ( SELECT ean FROM tem_categoria WHERE nome = %s )"
+        data = (category_name,)
+        cursor.execute(query, data)
+        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+
         query = "DELETE FROM tem_outra WHERE super_categoria = %s or categoria = %s"
         data = (category_name, category_name)
         cursor.execute(query, data)
@@ -119,20 +124,15 @@ def categoria_remove():
         cursor.execute(query, data)
         queries.append(cursor.mogrify(query, data).decode('utf-8'))
 
-        # query = "DELETE FROM tem_categoria WHERE nome = %s"
-        # data = (category_name,)
-        # cursor.execute(query, data)
-        # queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        query = "DELETE FROM tem_categoria WHERE nome = %s"
+        data = (category_name,)
+        cursor.execute(query, data)
+        queries.append(cursor.mogrify(query, data).decode('utf-8'))
 
-        # query = "DELETE FROM planograma WHERE loc = %s"
-        # data = (category_name,)
-        # cursor.execute(query, data)
-        # queries.append(cursor.mogrify(query, data).decode('utf-8'))
-
-        # query = "DELETE FROM prateleira WHERE nome = %s"
-        # data = (category_name,)
-        # cursor.execute(query, data)
-        # queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        query = "DELETE FROM planograma WHERE loc = %s"
+        data = (category_name,)
+        cursor.execute(query, data)
+        queries.append(cursor.mogrify(query, data).decode('utf-8'))
 
         query = "DELETE FROM categoria WHERE nome = %s"
         data = (category_name,)

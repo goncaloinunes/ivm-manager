@@ -3,7 +3,7 @@
 from inspect import Traceback
 from wsgiref.handlers import CGIHandler
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import psycopg2
 import psycopg2.extras
 
@@ -11,9 +11,6 @@ import psycopg2.extras
 DB_HOST = "db.tecnico.ulisboa.pt"
 DB_USER = "ist199074"
 DB_DATABASE = DB_USER
-
-# with open('../.env', 'r') as f:
-#     DB_PASSWORD = f.read()
 
 DB_PASSWORD = r"****"
 
@@ -102,46 +99,46 @@ def categoria_remove():
         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         category_name = request.form['category_name']
-        queries = []
+        
 
         query = "DELETE FROM produto WHERE ean IN ( SELECT ean FROM tem_categoria WHERE nome = %s )"
         data = (category_name,)
         cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        
 
         query = "DELETE FROM tem_outra WHERE super_categoria = %s or categoria = %s"
         data = (category_name, category_name)
         cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        
 
         query = "DELETE FROM categoria_simples WHERE nome = %s"
         data = (category_name,)
         cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        
 
         query = "DELETE FROM super_categoria WHERE nome = %s"
         data = (category_name,)
         cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        
 
         query = "DELETE FROM tem_categoria WHERE nome = %s"
         data = (category_name,)
         cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        
 
         query = "DELETE FROM planograma WHERE loc = %s"
         data = (category_name,)
         cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        
 
         query = "DELETE FROM categoria WHERE nome = %s"
         data = (category_name,)
         cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        
 
         dbConn.commit()
 
-        return str(queries)
+        return redirect(url_for('categorias_list'))
 
     except Exception as e:
         return str(e)
@@ -174,18 +171,18 @@ def categoria_add():
         category_name = request.form['category_name']
         super_category_name = request.form['super_category']
         category_type = request.form['category_type']
-        queries = []
+        
 
         query = "INSERT INTO categoria VALUES (%s)"
         data = (category_name,)
         cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        
 
         if super_category_name != "":
             query = "INSERT INTO tem_outra (super_categoria, categoria) VALUES (%s, %s)"
             data = (super_category_name, category_name)
             cursor.execute(query, data)
-            queries.append(cursor.mogrify(query, data).decode('utf-8'))
+            
         
         if category_type == "categoria_simples":
             query = "INSERT INTO categoria_simples VALUES (%s)"
@@ -194,11 +191,11 @@ def categoria_add():
         
         data = (category_name,)
         cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        
 
         dbConn.commit()
 
-        return str(queries)
+        return redirect(url_for('categorias_list'))
 
     except Exception as e:
         return str(e)
@@ -259,7 +256,7 @@ def retalhista_add():
 
         dbConn.commit()
 
-        return str(cursor.mogrify(query, data).decode('utf-8'))
+        return redirect(url_for('index'))
 
     except Exception as e:
         return str(e)
@@ -279,28 +276,28 @@ def retalhista_remove():
     try:
         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        queries = []
+        
 
         retalhista_tin = request.form['tin']
 
         query = "DELETE FROM responsavel_por WHERE tin = %s"
         data = (retalhista_tin,)
         cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        
 
         query = "DELETE FROM evento_reposicao WHERE tin = %s"
         data = (retalhista_tin,)
         cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        
 
         query = "DELETE FROM retalhista WHERE tin = %s"
         data = (retalhista_tin,)
         cursor.execute(query, data)
-        queries.append(cursor.mogrify(query, data).decode('utf-8'))
+        
 
         dbConn.commit()
 
-        return str(queries)
+        return redirect(url_for('retalhistas_list'))
 
     except Exception as e:
         return str(e)
